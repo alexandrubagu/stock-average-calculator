@@ -136,6 +136,26 @@ test.describe('capital controls', () => {
     await expect(u.slider).toHaveValue(/^3\d\d/) // the slider follows (snapped to its step)
   })
 
+  test('the result cards do not move while the slider moves', async ({ page }) => {
+    // $25 shares with a $45 slider step: every other step leaves money uninvested.
+    for (const width of [page.viewportSize()!.width, 1024, 800, 600]) {
+      await page.setViewportSize({ width, height: 900 })
+      await page.goto('./?q0=100&p0=50&pm=25')
+      await ui(page).slider.focus()
+      const boxes = new Set<string>()
+      for (let i = 0; i < 30; i++) {
+        await page.keyboard.press('ArrowRight')
+        boxes.add(
+          await page.locator('#stats').evaluate((el) => {
+            const rect = el.getBoundingClientRect()
+            return `${Math.round(rect.top + window.scrollY)}:${Math.round(rect.height)}`
+          }),
+        )
+      }
+      expect([...boxes], `at ${width}px`).toHaveLength(1)
+    }
+  })
+
   test('amounts above the slider range are capped with an explanation', async ({ page }) => {
     await page.goto('./?q0=100&p0=50&pm=40')
     const u = ui(page)

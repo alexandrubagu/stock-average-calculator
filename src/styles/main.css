@@ -375,7 +375,6 @@ input {
 
 .hero {
   padding-block: var(--space-8) var(--space-6);
-  max-width: 46rem;
 }
 
 .hero h1 {
@@ -800,6 +799,10 @@ input {
   font-weight: 650;
 }
 
+.capital-hint {
+  margin-top: calc(var(--space-2) * -1);
+}
+
 .capital-readout {
   flex: none;
   text-align: right;
@@ -912,13 +915,11 @@ input {
   font-weight: 600;
 }
 
+/* Space for one line is always reserved so notes never shift the cards below. */
 .amount-row .hint {
   grid-column: 1 / -1;
+  min-height: 1.4em;
   margin: 0;
-}
-
-.amount-row .hint:empty {
-  display: none;
 }
 
 /* ==========================================================================
@@ -1146,7 +1147,6 @@ caption {
 .content {
   display: grid;
   gap: var(--space-12);
-  max-width: 46rem;
   padding-block: var(--space-12);
 }
 
@@ -1237,17 +1237,29 @@ caption {
 
 .faq {
   display: grid;
+  gap: var(--space-6);
+}
+
+.faq-item {
+  display: grid;
   gap: var(--space-2);
+  align-content: start;
 }
 
 .faq h3 {
-  margin-top: var(--space-4);
   font-size: 1.0625rem;
   font-weight: 650;
 }
 
-.faq h3:first-child {
-  margin-top: 0;
+@media (min-width: 900px) {
+  .formula-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .faq {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-8) var(--space-12);
+  }
 }
 
 /* ==========================================================================

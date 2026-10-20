@@ -118,10 +118,15 @@ function capitalCaption(state: State): string {
   return `${formatPercentOfMax(result.pctOfMax)} of max improvement`
 }
 
+/**
+ * Explains a typed amount (capped, too small, or not fully invested). Shown
+ * only for typed amounts: while dragging, a note that comes and goes would
+ * make the cards below jump, and the Capital card already says what is spent.
+ */
 function amountNote(state: State, requested: number | null): string {
   const { result, inputs, curve } = state
-  if (!result || !inputs || !curve) return ''
-  if (requested !== null && requested > curve.sliderMax) {
+  if (!result || !inputs || !curve || requested === null) return ''
+  if (requested > curve.sliderMax) {
     const reason = curve.deltaMax > 0 ? '90% of the maximum improvement' : "10× your position's cost"
     return `Capped at ${formatMoney(curve.sliderMax)}, where the slider ends (${reason}).`
   }

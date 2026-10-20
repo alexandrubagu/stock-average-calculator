@@ -278,15 +278,13 @@
 
               <section id="capital-panel" class="card capital-card" aria-labelledby="capital-title" hidden>
                 <div class="capital-header">
-                  <div>
-                    <h3 id="capital-title">Capital to invest</h3>
-                    <p class="muted">Drag the slider, tap the chart or type an amount.</p>
-                  </div>
+                  <h3 id="capital-title">Capital to invest</h3>
                   <div class="capital-readout">
                     <output id="capital-display" for="capital-slider capital-amount">$0.00</output>
                     <p id="capital-pct" class="muted">&nbsp;</p>
                   </div>
                 </div>
+                <p class="muted capital-hint">Drag the slider, tap the chart or type an amount.</p>
                 <input id="capital-slider" class="range" type="range" min="0" max="10000" step="1" value="0" aria-labelledby="capital-title" />
                 <div class="slider-scale" aria-hidden="true">
                   <span>$0</span>
@@ -492,56 +490,72 @@
           <section id="faq" aria-labelledby="faq-title">
             <h2 id="faq-title">Frequently asked questions</h2>
             <div class="faq">
-              <h3>How is the new average price calculated?</h3>
-              <p>
-                Add the cost of the shares you already own (shares held × average buy price) to the amount you spend on
-                new shares, then divide by your new total number of shares. For example, 100 shares at $50 plus 100
-                shares at $40 gives (5,000 + 4,000) ÷ 200 = $45.
-              </p>
+              <div class="faq-item">
+                <h3>How is the new average price calculated?</h3>
+                <p>
+                  Add the cost of the shares you already own (shares held × average buy price) to the amount you spend on
+                  new shares, then divide by your new total number of shares. For example, 100 shares at $50 plus 100
+                  shares at $40 gives (5,000 + 4,000) ÷ 200 = $45.
+                </p>
+              </div>
 
-              <h3>Can averaging down bring my average below the current price?</h3>
-              <p>
-                No. Every new share costs the current price, so your average moves toward that price but never reaches
-                it. The largest possible improvement is your average buy price minus the current price, and getting close
-                to it takes ever larger amounts of money.
-              </p>
+              <div class="faq-item">
+                <h3>Can averaging down bring my average below the current price?</h3>
+                <p>
+                  No. Every new share costs the current price, so your average moves toward that price but never reaches
+                  it. The largest possible improvement is your average buy price minus the current price, and getting close
+                  to it takes ever larger amounts of money.
+                </p>
+              </div>
 
-              <h3>Why does each extra dollar improve my average by less?</h3>
-              <p>
-                Your average is a weighted average. The more new shares you add, the more the cheaper shares already
-                dominate it, so each further share shifts it less. That is why the curve is steep at first and then
-                flattens out.
-              </p>
+              <div class="faq-item">
+                <h3>Why does each extra dollar improve my average by less?</h3>
+                <p>
+                  Your average is a weighted average. The more new shares you add, the more the cheaper shares already
+                  dominate it, so each further share shifts it less. That is why the curve is steep at first and then
+                  flattens out.
+                </p>
+              </div>
 
-              <h3>What does the efficiency figure mean?</h3>
-              <p>
-                Efficiency is the marginal rate of improvement at the selected amount: how much the next $100 would lower
-                your average, as a percentage of your original average buy price. It falls steadily as you invest more.
-              </p>
+              <div class="faq-item">
+                <h3>What does the efficiency figure mean?</h3>
+                <p>
+                  Efficiency is the marginal rate of improvement at the selected amount: how much the next $100 would lower
+                  your average, as a percentage of your original average buy price. It falls steadily as you invest more.
+                </p>
+              </div>
 
-              <h3>Does the calculator include fees, taxes or fractional shares?</h3>
-              <p>
-                No. It buys whole shares only, at the current price you enter, with no commissions or taxes. Money that is
-                not enough for one more whole share is left uninvested and not counted.
-              </p>
+              <div class="faq-item">
+                <h3>Does the calculator include fees, taxes or fractional shares?</h3>
+                <p>
+                  No. It buys whole shares only, at the current price you enter, with no commissions or taxes. Money that is
+                  not enough for one more whole share is left uninvested and not counted.
+                </p>
+              </div>
 
-              <h3>What if the current price is above my average buy price?</h3>
-              <p>
-                Then buying more is averaging up: every new share costs more than your current average, so your average
-                rises. The calculator shows a warning and the curve falls below zero.
-              </p>
+              <div class="faq-item">
+                <h3>What if the current price is above my average buy price?</h3>
+                <p>
+                  Then buying more is averaging up: every new share costs more than your current average, so your average
+                  rises. The calculator shows a warning and the curve falls below zero.
+                </p>
+              </div>
 
-              <h3>Are my numbers stored or sent anywhere?</h3>
-              <p>
-                No. All calculations run in your browser. There is no account, no server, no cookies and no tracking. The
-                values only appear in the page address so you can bookmark or share a scenario.
-              </p>
+              <div class="faq-item">
+                <h3>Are my numbers stored or sent anywhere?</h3>
+                <p>
+                  No. All calculations run in your browser. There is no account, no server, no cookies and no tracking. The
+                  values only appear in the page address so you can bookmark or share a scenario.
+                </p>
+              </div>
 
-              <h3>Is this investment advice?</h3>
-              <p>
-                No. The calculator shows what the arithmetic of averaging does. It cannot tell you whether a stock will
-                recover, and it does not recommend buying, holding or selling anything.
-              </p>
+              <div class="faq-item">
+                <h3>Is this investment advice?</h3>
+                <p>
+                  No. The calculator shows what the arithmetic of averaging does. It cannot tell you whether a stock will
+                  recover, and it does not recommend buying, holding or selling anything.
+                </p>
+              </div>
             </div>
           </section>
         </article>
