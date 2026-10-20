@@ -33,8 +33,15 @@ and is hosted on GitHub Pages.
   - click or drag on the chart
 - **Clear states.** Validation runs on blur with actionable messages, plus an averaging-up warning, an equal-price
   notice, and a placeholder chart.
+- **Guided tour.** On the first visit, a short tour types an example position into the three fields, moves the
+  slider and points at each result, then clears the example. **How it works** replays it at any time.
+  - It doesn't start by itself when the page is opened from a shared link, and once it has been finished or
+    skipped it never starts on its own again (remembered in `localStorage` as `tour-seen`).
+  - It works with the keyboard (Esc closes it, and the page behind it is inert) and is read aloud step by step
+    by screen readers.
+  - With reduced motion turned on, values appear instantly instead of being typed and slid.
 - **Extras:**
-  - "Try an example" and "Reset"
+  - "Reset"
   - a shareable URL (`?q0=100&p0=50&pm=40&c=4000`)
   - an accessible data table
   - screen-reader announcements
@@ -69,7 +76,7 @@ src/
   lib/chart-geometry.ts    Scales, Fritsch–Carlson path, ticks (port of AvgrWeb.Components.Curve)
   lib/format.ts            Currency, axis-label and percentage formatting
   state/store.ts           Pure state transitions (mirrors the LiveView event handlers)
-  ui/                      DOM rendering only: form, chart, capital controls, results, theme, URL state
+  ui/                      DOM rendering only: form, chart, capital controls, results, theme, URL state, tour
   styles/main.css          Design tokens, layout and components
 tests/
   unit/                    Vitest: calculator, validation, chart geometry, formatting, store
@@ -139,7 +146,8 @@ npm run build && npm run test:e2e     # end-to-end tests on the production build
   - slider keyboard control
   - typed amounts and chart clicks
   - chart/stat/table synchronization
-  - example, reset and shared links
+  - the guided tour (first visit, replay, Back/Next mid-animation, Esc, layout on desktop and mobile)
+  - reset and shared links
   - special cases
   - theme persistence
   - no horizontal scrolling from 320 px to 1920 px
@@ -279,10 +287,12 @@ after blur) and the stat-card rules are unchanged. These differences are deliber
      showed it.
 7. **Always visible:** the page heading and the "How to read this chart" card. The original hid the heading once a
    curve existed and showed the card only with a curve.
-8. **Defaults:**
+8. **Guided tour instead of an example button.** The tour and the "How it works" button are new; the original had
+   neither. The header link to the explanations below is called "Guide" so it doesn't clash with the button.
+9. **Defaults:**
    - The theme follows the operating system until toggled; the original always started light.
    - Links to other avgr.app pages and the analytics script were removed.
-9. **Not ported:** the original ExUnit case "compute_efficiency with zero capital returns 0" exercises a guard that a
+10. **Not ported:** the original ExUnit case "compute_efficiency with zero capital returns 0" exercises a guard that a
    Decimal argument never matches. The app always used the general formula, so efficiency at $0 is non-zero in both
    versions.
 

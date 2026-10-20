@@ -4,16 +4,7 @@
  * table always show the same numbers.
  */
 import { sliderStep } from '../lib/calculator'
-import {
-  EXAMPLE,
-  blur,
-  initialState,
-  input,
-  load,
-  setCapital,
-  sliderMaxOf,
-  type State,
-} from '../state/store'
+import { blur, initialState, input, load, setCapital, sliderMaxOf, type State } from '../state/store'
 import { createCapitalControls, type CapitalSource } from './capital'
 import { createChart } from './chart'
 import { summarize } from './describe'
@@ -24,7 +15,18 @@ import { createUrlSync, readUrlState } from './url-state'
 
 const ANNOUNCE_DELAY = 700
 
-export function startApp(): void {
+export interface App {
+  getState(): State
+  /** Shows a state without announcing it or writing it to the URL (used by the tour). */
+  preview(next: State): void
+  /** Shows a state and writes it to the URL. */
+  show(next: State): void
+  focusFirstField(): void
+  /** True when the page was opened from a shared link with a scenario. */
+  openedWithScenario: boolean
+}
+
+export function startApp(): App {
   let state: State = initialState()
   const announcer = byId('announcer')
   const syncUrl = createUrlSync()
@@ -33,7 +35,6 @@ export function startApp(): void {
   const form = createForm({
     onInput: (field, value) => update(input(state, field, value), 'other', true),
     onBlur: (field) => update(blur(state, field), 'other', false),
-    onExample: () => update(load(state, EXAMPLE.raw, EXAMPLE.capital), 'other', true),
     onReset: () => {
       update(initialState(), 'other', false)
       form.focusFirst()
@@ -48,12 +49,16 @@ export function startApp(): void {
     update(setCapital(state, Math.min(max, Math.round(value / step) * step)), 'chart', done)
   })
 
-  function update(next: State, source: CapitalSource, announce: boolean): void {
+  function render(next: State, source: CapitalSource): void {
     state = next
     form.render(state)
     results.render(state)
     capital.render(state, source)
     chart.render(state)
+  }
+
+  function update(next: State, source: CapitalSource, announce: boolean): void {
+    render(next, source)
     syncUrl(state)
     if (announce) scheduleAnnouncement()
   }
@@ -67,4 +72,12 @@ export function startApp(): void {
 
   const fromUrl = readUrlState(window.location.search)
   update(fromUrl ? load(state, fromUrl.raw, fromUrl.capital) : state, 'other', false)
+
+  return {
+    getState: () => state,
+    preview: (next) => render(next, 'other'),
+    show: (next) => update(next, 'other', false),
+    focusFirstField: () => form.focusFirst(),
+    openedWithScenario: fromUrl !== null,
+  }
 }

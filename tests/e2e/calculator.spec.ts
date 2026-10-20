@@ -243,13 +243,12 @@ test.describe('special cases', () => {
   })
 })
 
-test.describe('example, reset and shareable links', () => {
-  test('the example button loads a position and the URL follows', async ({ page }) => {
+test.describe('reset and shareable links', () => {
+  test('the URL follows the inputs', async ({ page }) => {
     await page.goto('./')
-    await page.getByRole('button', { name: 'Try an example' }).click()
-    const u = ui(page)
-    await expect(u.q0).toHaveValue('100')
-    await expect(u.newAvg).toHaveText('$45.00')
+    await fillPosition(page, '100', '50', '40')
+    await ui(page).amount.fill('4000')
+    await expect(ui(page).newAvg).toHaveText('$45.00')
     await expect(page).toHaveURL(/\?q0=100&p0=50&pm=40&c=4000$/)
   })
 

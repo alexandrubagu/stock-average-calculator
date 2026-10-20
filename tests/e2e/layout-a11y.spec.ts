@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright'
-import { expect, test, ui } from './fixtures'
+import { expect, fillPosition, test, ui } from './fixtures'
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']
 
@@ -91,7 +91,7 @@ test.describe('accessibility', () => {
       await page.keyboard.press('Tab')
       order.push(await page.evaluate(() => document.activeElement?.id || document.activeElement?.textContent?.trim() || ''))
     }
-    expect(order).toEqual(['p0', 'pm', 'example-button', 'reset-button', 'capital-slider', 'capital-amount'])
+    expect(order).toEqual(['p0', 'pm', 'tour-button', 'reset-button', 'capital-slider', 'capital-amount'])
   })
 
   test('the chart has an accessible name and description', async ({ page }) => {
@@ -103,7 +103,9 @@ test.describe('accessibility', () => {
 
   test('results are announced politely after a change settles', async ({ page }) => {
     await page.goto('./')
-    await page.getByRole('button', { name: 'Try an example' }).click()
+    await fillPosition(page, '100', '50', '40')
+    await ui(page).amount.fill('4000')
+    await ui(page).amount.press('Tab')
     await expect(page.locator('#announcer')).toHaveText(
       '100 shares for $4,000.00: new average $45.00, $5.00 lower, 50% of the maximum improvement.',
     )

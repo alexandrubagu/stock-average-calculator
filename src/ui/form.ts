@@ -5,7 +5,6 @@ import { byId, setText } from './dom'
 export interface FormHandlers {
   onInput(field: Field, value: string): void
   onBlur(field: Field): void
-  onExample(): void
   onReset(): void
 }
 
@@ -48,7 +47,6 @@ export function createForm(handlers: FormHandlers): FormView {
     event.preventDefault()
     handlers.onReset()
   })
-  byId('example-button').addEventListener('click', () => handlers.onExample())
 
   return {
     render(state) {

@@ -556,6 +556,7 @@ input {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: var(--space-2);
   min-height: 2.75rem;
   padding: 0 var(--space-4);
   border-radius: var(--radius);
@@ -1276,6 +1277,98 @@ caption {
 
 .not-found .button {
   text-decoration: none;
+}
+
+/* ==========================================================================
+   Guided tour
+   ========================================================================== */
+
+.tour-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+}
+
+.tour-spotlight {
+  position: fixed;
+  z-index: 91;
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 0 0 2px var(--primary),
+    0 0 0 200vmax rgb(15 23 42 / 0.55);
+  pointer-events: none;
+}
+
+:root[data-theme='dark'] .tour-spotlight {
+  box-shadow:
+    0 0 0 2px var(--primary),
+    0 0 0 200vmax rgb(0 0 0 / 0.65);
+}
+
+.tour-popover {
+  position: fixed;
+  z-index: 92;
+  display: grid;
+  gap: var(--space-2);
+  width: min(22rem, calc(100vw - 1.5rem));
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgb(15 23 42 / 0.25);
+}
+
+.tour-popover.is-docked {
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  width: auto;
+}
+
+.tour-progress {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tour-title {
+  font-size: 1.0625rem;
+  font-weight: 650;
+}
+
+.tour-body {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.tour-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.tour-actions .button {
+  min-height: 2.5rem;
+}
+
+.tour-skip {
+  margin-right: auto;
+  padding: var(--space-2) 0;
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.tour-skip:hover {
+  color: var(--text);
 }
 
 /* ==========================================================================

@@ -275,7 +275,8 @@ function updateCursor(drawn: Drawn, state: State): void {
   const boxWidth = label.length * 6.9 + 16
   const onLeft = cx > layout.margins.left + scales.plotWidth * 0.65
   const boxX = onLeft ? cx - 12 - boxWidth : cx + 12
-  const boxY = Math.max(2, cy - 32)
+  // Near the top of the plot the tooltip goes below the marker, clear of the "max" label.
+  const boxY = cy - 32 < layout.margins.top + 4 ? cy + 12 : cy - 32
   drawn.tooltipBg.setAttribute('x', boxX.toFixed(2))
   drawn.tooltipBg.setAttribute('y', boxY.toFixed(2))
   drawn.tooltipBg.setAttribute('width', boxWidth.toFixed(2))

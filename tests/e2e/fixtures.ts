@@ -1,7 +1,16 @@
 import { test as base, expect, type Page } from '@playwright/test'
 
-/** Fails any test that logs a console error or throws an uncaught exception. */
-export const test = base.extend<{ consoleErrors: string[] }>({
+export const test = base.extend<{ consoleErrors: string[]; tourSeen: boolean }>({
+  /**
+   * Marks the first-visit tour as already seen, so it doesn't cover the page.
+   * Tour tests opt out with `test.use({ tourSeen: false })`.
+   */
+  tourSeen: [true, { option: true }],
+  context: async ({ context, tourSeen }, use) => {
+    if (tourSeen) await context.addInitScript(() => localStorage.setItem('tour-seen', '1'))
+    await use(context)
+  },
+  /** Fails any test that logs a console error or throws an uncaught exception. */
   consoleErrors: [
     async ({ page }, use) => {
       const errors: string[] = []
@@ -20,9 +29,9 @@ export { expect }
 
 export function ui(page: Page) {
   return {
-    q0: page.getByLabel('Shares held'),
-    p0: page.getByLabel('Average buy price'),
-    pm: page.getByLabel('Current price'),
+    q0: page.getByRole('textbox', { name: 'Shares held' }),
+    p0: page.getByRole('textbox', { name: 'Average buy price' }),
+    pm: page.getByRole('textbox', { name: 'Current price' }),
     slider: page.locator('#capital-slider'),
     amount: page.getByLabel('Amount', { exact: true }),
     capitalPanel: page.locator('#capital-panel'),
