@@ -1,5 +1,12 @@
 # Stock Average Calculator
 
+The site has two pages:
+
+- **`/`**: a landing page for the [Android app on Google Play](https://play.google.com/store/apps/details?id=io.github.alexandrubagu.stockaverage)
+  (`index.html`, `src/landing.ts`, `src/styles/landing.css`, screenshots in `public/app/`).
+- **`/calculator/`**: the web calculator described below (`calculator/index.html`). Old links to the home page that
+  carry a scenario (`?q0=…`) or an in-page anchor (`#faq`, …) are redirected there.
+
 A static, privacy-friendly stock average (averaging down) calculator. Enter the shares you hold, your average buy price
 and the current price to see:
 
@@ -12,7 +19,7 @@ It is a standalone rebuild of the `/stock-average-calculator` LiveView page of t
 formulas and display rules are the same, verified value-for-value against the original. It runs entirely in the browser
 and is hosted on GitHub Pages.
 
-**Production URL:** <https://alexandrubagu.github.io/stock-average-calculator/>
+**Production URL:** <https://alexandrubagu.github.io/stock-average-calculator/calculator/>
 (configurable — see [Base URL](#base-url-and-custom-domains)).
 
 > Not financial advice. The calculator performs mathematical calculations only.
@@ -54,7 +61,7 @@ and is hosted on GitHub Pages.
 
 | Concern | Choice | Why |
 | --- | --- | --- |
-| Build | [Vite 8](https://vite.dev) | Fast dev server; hashed, minified static output; multi-page (index + 404) |
+| Build | [Vite 8](https://vite.dev) | Fast dev server; hashed, minified static output; multi-page (landing + calculator + 404) |
 | Language | TypeScript (strict), vanilla DOM | One interactive widget doesn't justify a UI framework; ~21 KB gzipped JS in total |
 | Math | `decimal.js` (only runtime dependency) | Same precision/rounding as the original `Decimal` code, no float errors |
 | Chart | Hand-written SVG | Direct port of the original `curve.ex`; no chart library needed |
@@ -64,7 +71,8 @@ and is hosted on GitHub Pages.
 ## Project structure
 
 ```
-index.html                 Calculator page (all content is static HTML; JS enhances it)
+index.html                 Android app landing page
+calculator/index.html      Calculator page (all content is static HTML; JS enhances it)
 404.html                   Not-found page for GitHub Pages
 public/                    favicon.svg, og-image.png, apple-touch-icon.png (copied as-is)
 site.config.ts             Production URL (SITE_URL) → canonical URL and Vite base path
@@ -161,7 +169,7 @@ npm run build && npm run test:e2e     # end-to-end tests on the production build
 
 `npm run build` writes `dist/`:
 
-- `index.html` and `404.html`, with `SITE_URL` injected into the canonical, Open Graph and JSON-LD URLs
+- `index.html`, `calculator/index.html` and `404.html`, with `SITE_URL` injected into the canonical, Open Graph and JSON-LD URLs
 - `assets/*-[hash].js|css`: minified (Oxc for JS, Lightning CSS for CSS) and tree-shaken, with cache-friendly hashed
   names
 - `robots.txt` and `sitemap.xml`, generated for `SITE_URL`
@@ -240,11 +248,13 @@ deployments.
 
 ## SEO
 
-- A unique title and meta description; canonical URL; Open Graph and Twitter card tags with a 1200×630 image.
-- JSON-LD `WebApplication` and `FAQPage`. The FAQ data is tested to match the visible questions.
+- Landing page: its own title, description and canonical URL, Open Graph image `og-app.png` and JSON-LD
+  `MobileApplication` pointing to the Play listing. The Google Play badge is Google's official artwork, unmodified.
+- Calculator: a unique title and meta description; canonical URL; Open Graph and Twitter card tags with a 1200×630 image.
+- JSON-LD `WebApplication` and `FAQPage` on the calculator. The FAQ data is tested to match the visible questions.
 - Semantic landmarks and a single `h1`. Static, indexable explanations, formulas, a worked example (its numbers are
   asserted in the unit tests) and a FAQ.
-- `robots.txt` and a single-URL `sitemap.xml`, generated for `SITE_URL`. The 404 page is `noindex`.
+- `robots.txt` and a `sitemap.xml` listing both pages, generated for `SITE_URL`. The 404 page is `noindex`.
 - **Project-site caveat:** crawlers only read `robots.txt` at the root of a host. Under
   `https://alexandrubagu.github.io/stock-average-calculator/` the generated `robots.txt` is valid but ignored. To make
   the sitemap discoverable, either:

@@ -2,7 +2,7 @@ import { expect, fillPosition, money, test, ui } from './fixtures'
 
 test.describe('initial render', () => {
   test('starts empty, like the original, with the placeholder chart', async ({ page }) => {
-    await page.goto('./')
+    await page.goto('calculator/')
     const u = ui(page)
 
     await expect(page).toHaveTitle(/Stock Average Calculator/)
@@ -24,7 +24,7 @@ test.describe('initial render', () => {
 
 test.describe('inputs and validation', () => {
   test('shows an error only after the field is left, and clears it when fixed', async ({ page }) => {
-    await page.goto('./')
+    await page.goto('calculator/')
     const { q0 } = ui(page)
     const error = page.locator('#q0-error')
 
@@ -45,7 +45,7 @@ test.describe('inputs and validation', () => {
   })
 
   test('price fields explain how to fix comma-formatted numbers', async ({ page }) => {
-    await page.goto('./')
+    await page.goto('calculator/')
     const { p0 } = ui(page)
     await p0.fill('1,234.50')
     await p0.blur()
@@ -53,7 +53,7 @@ test.describe('inputs and validation', () => {
   })
 
   test('pressing Enter validates every field instead of reloading', async ({ page }) => {
-    await page.goto('./')
+    await page.goto('calculator/')
     const { q0 } = ui(page)
     await q0.fill('100')
     await q0.press('Enter')
@@ -63,7 +63,7 @@ test.describe('inputs and validation', () => {
   })
 
   test('computes the curve once all three inputs are valid', async ({ page }) => {
-    await page.goto('./')
+    await page.goto('calculator/')
     const u = ui(page)
     await fillPosition(page, '100', '50', '40')
 
@@ -77,7 +77,7 @@ test.describe('inputs and validation', () => {
   })
 
   test('editing each input updates the result', async ({ page }) => {
-    await page.goto('./?q0=100&p0=50&pm=40&c=4000')
+    await page.goto('calculator/?q0=100&p0=50&pm=40&c=4000')
     const u = ui(page)
     await expect(u.newAvg).toHaveText('$45.00')
 
@@ -91,7 +91,7 @@ test.describe('inputs and validation', () => {
   })
 
   test('keeps the amount while an input is invalid and re-clamps it afterwards', async ({ page }) => {
-    await page.goto('./?q0=100&p0=50&pm=40&c=30000')
+    await page.goto('calculator/?q0=100&p0=50&pm=40&c=30000')
     const u = ui(page)
     await u.pm.fill('')
     await expect(u.capitalPanel).toBeHidden()
@@ -103,7 +103,7 @@ test.describe('inputs and validation', () => {
 
 test.describe('capital controls', () => {
   test('slider works with the keyboard', async ({ page }) => {
-    await page.goto('./?q0=100&p0=50&pm=40')
+    await page.goto('calculator/?q0=100&p0=50&pm=40')
     const u = ui(page)
     await u.slider.focus()
 
@@ -126,7 +126,7 @@ test.describe('capital controls', () => {
   })
 
   test('exact amount field drives the same result and explains leftovers', async ({ page }) => {
-    await page.goto('./?q0=100&p0=50&pm=40')
+    await page.goto('calculator/?q0=100&p0=50&pm=40')
     const u = ui(page)
     await u.amount.fill('350')
     await expect(u.shares).toHaveText('8')
@@ -140,7 +140,7 @@ test.describe('capital controls', () => {
     // $25 shares with a $45 slider step: every other step leaves money uninvested.
     for (const width of [page.viewportSize()!.width, 1024, 800, 600]) {
       await page.setViewportSize({ width, height: 900 })
-      await page.goto('./?q0=100&p0=50&pm=25')
+      await page.goto('calculator/?q0=100&p0=50&pm=25')
       await ui(page).slider.focus()
       const boxes = new Set<string>()
       for (let i = 0; i < 30; i++) {
@@ -157,7 +157,7 @@ test.describe('capital controls', () => {
   })
 
   test('amounts above the slider range are capped with an explanation', async ({ page }) => {
-    await page.goto('./?q0=100&p0=50&pm=40')
+    await page.goto('calculator/?q0=100&p0=50&pm=40')
     const u = ui(page)
     await u.amount.fill('50000')
     await expect(u.capitalDisplay).toHaveText('$36,000.00')
@@ -165,7 +165,7 @@ test.describe('capital controls', () => {
   })
 
   test('clicking the chart selects an amount', async ({ page }) => {
-    await page.goto('./?q0=100&p0=50&pm=40')
+    await page.goto('calculator/?q0=100&p0=50&pm=40')
     const u = ui(page)
     const hit = page.locator('#chart .hit-area')
     await hit.scrollIntoViewIfNeeded()
@@ -183,7 +183,7 @@ test.describe('capital controls', () => {
 
 test.describe('results stay in sync', () => {
   test('chart marker, stats, table and description show the same numbers', async ({ page }) => {
-    await page.goto('./?q0=100&p0=50&pm=40&c=4000')
+    await page.goto('calculator/?q0=100&p0=50&pm=40&c=4000')
     const u = ui(page)
 
     await expect(u.newAvg).toHaveText('$45.00')
@@ -206,7 +206,7 @@ test.describe('results stay in sync', () => {
   })
 
   test('the marker moves to the selected point on the curve', async ({ page }) => {
-    await page.goto('./?q0=100&p0=50&pm=40&c=4000')
+    await page.goto('calculator/?q0=100&p0=50&pm=40&c=4000')
     const ring = page.locator('#chart .cursor-ring')
     const before = Number(await ring.getAttribute('cx'))
     await ui(page).amount.fill('20000')
@@ -217,7 +217,7 @@ test.describe('results stay in sync', () => {
 
 test.describe('special cases', () => {
   test('averaging up shows a warning with the real market price', async ({ page }) => {
-    await page.goto('./?q0=100&p0=40&pm=50&c=5000')
+    await page.goto('calculator/?q0=100&p0=40&pm=50&c=5000')
     const u = ui(page)
     const notice = page.locator('#notice-averaging-up')
     await expect(notice).toBeVisible()
@@ -230,14 +230,14 @@ test.describe('special cases', () => {
   })
 
   test('equal prices explain that nothing can change', async ({ page }) => {
-    await page.goto('./?q0=100&p0=50&pm=50&c=1000')
+    await page.goto('calculator/?q0=100&p0=50&pm=50&c=1000')
     await expect(page.locator('#notice-flat')).toBeVisible()
     await expect(ui(page).newAvg).toHaveText('$50.00')
     await expect(ui(page).delta).toHaveText('—')
   })
 
   test('penny stocks show enough decimals', async ({ page }) => {
-    await page.goto('./?q0=25000&p0=0.0125&pm=0.0089&c=900')
+    await page.goto('calculator/?q0=25000&p0=0.0125&pm=0.0089&c=900')
     await expect(ui(page).newAvg).toHaveText('$0.009614')
     await expect(ui(page).shares).toHaveText('101,123')
   })
@@ -245,7 +245,7 @@ test.describe('special cases', () => {
 
 test.describe('reset and shareable links', () => {
   test('the URL follows the inputs', async ({ page }) => {
-    await page.goto('./')
+    await page.goto('calculator/')
     await fillPosition(page, '100', '50', '40')
     await ui(page).amount.fill('4000')
     await expect(ui(page).newAvg).toHaveText('$45.00')
@@ -253,17 +253,17 @@ test.describe('reset and shareable links', () => {
   })
 
   test('reset clears everything and returns focus to the first field', async ({ page }) => {
-    await page.goto('./?q0=100&p0=50&pm=40&c=4000')
+    await page.goto('calculator/?q0=100&p0=50&pm=40&c=4000')
     await page.getByRole('button', { name: 'Reset' }).click()
     const u = ui(page)
     await expect(u.q0).toHaveValue('')
     await expect(u.q0).toBeFocused()
     await expect(u.capitalPanel).toBeHidden()
-    await expect(page).toHaveURL(test.info().project.use.baseURL!)
+    await expect(page).toHaveURL(`${test.info().project.use.baseURL!}calculator/`)
   })
 
   test('a shared link restores the scenario', async ({ page }) => {
-    await page.goto('./?q0=100&p0=50&pm=40&c=12000')
+    await page.goto('calculator/?q0=100&p0=50&pm=40&c=12000')
     const u = ui(page)
     await expect(u.newAvg).toHaveText('$42.50')
     await expect(u.delta).toHaveText('$7.50')
@@ -271,14 +271,14 @@ test.describe('reset and shareable links', () => {
   })
 
   test('invalid values in a link are explained', async ({ page }) => {
-    await page.goto('./?q0=ten&p0=50&pm=40')
+    await page.goto('calculator/?q0=ten&p0=50&pm=40')
     await expect(page.locator('#q0-error')).toBeVisible()
   })
 })
 
 test.describe('theme', () => {
   test('the theme toggle switches and remembers the choice', async ({ page }) => {
-    await page.goto('./')
+    await page.goto('calculator/')
     const html = page.locator('html')
     await expect(html).toHaveAttribute('data-theme', 'light')
     await page.getByRole('button', { name: 'Switch to dark theme' }).click()
@@ -291,7 +291,7 @@ test.describe('theme', () => {
   test('follows the system preference when nothing is saved', async ({ browser }) => {
     const context = await browser.newContext({ colorScheme: 'dark' })
     const page = await context.newPage()
-    await page.goto(test.info().project.use.baseURL!)
+    await page.goto(`${test.info().project.use.baseURL!}calculator/`)
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
     await context.close()
   })

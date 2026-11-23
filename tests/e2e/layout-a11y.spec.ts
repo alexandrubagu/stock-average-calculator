@@ -7,7 +7,7 @@ test.describe('responsive layout', () => {
   for (const width of [320, 390, 768, 1024, 1280, 1920]) {
     test(`no horizontal scrolling at ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 })
-      await page.goto('./?q0=1000000000&p0=12.5&pm=9.75&c=12345678901')
+      await page.goto('calculator/?q0=1000000000&p0=12.5&pm=9.75&c=12345678901')
       await expect(ui(page).newAvg).not.toHaveText('—')
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
       expect(overflow).toBeLessThanOrEqual(0)
@@ -15,7 +15,7 @@ test.describe('responsive layout', () => {
   }
 
   test('stacks the form above the chart on small screens and side by side on large ones', async ({ page }) => {
-    await page.goto('./?q0=100&p0=50&pm=40&c=4000')
+    await page.goto('calculator/?q0=100&p0=50&pm=40&c=4000')
     const form = (await page.locator('#position-form').boundingBox())!
     const chart = (await page.locator('.chart-card').boundingBox())!
     const width = page.viewportSize()!.width
@@ -27,7 +27,7 @@ test.describe('responsive layout', () => {
   })
 
   test('chart text stays readable on phones (rendered at real pixel size)', async ({ page }) => {
-    await page.goto('./?q0=100&p0=50&pm=40&c=4000')
+    await page.goto('calculator/?q0=100&p0=50&pm=40&c=4000')
     const ratio = await page.locator('#chart svg').evaluate((svg: SVGSVGElement) => {
       return svg.getBoundingClientRect().width / svg.viewBox.baseVal.width
     })
@@ -48,7 +48,7 @@ test.describe('accessibility', () => {
   for (const scenario of scenarios) {
     test(`no axe violations: ${scenario.name}`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: scenario.dark ? 'dark' : 'light' })
-      await page.goto(`./${scenario.query}`)
+      await page.goto(`calculator/${scenario.query}`)
       if (scenario.query) await page.getByText('Show the curve as a table').click()
       const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze()
       expect(results.violations, JSON.stringify(results.violations, null, 2)).toEqual([])
@@ -56,7 +56,7 @@ test.describe('accessibility', () => {
   }
 
   test('no axe violations with validation errors shown', async ({ page }) => {
-    await page.goto('./')
+    await page.goto('calculator/')
     await ui(page).q0.fill('abc')
     await ui(page).p0.fill('-1')
     await ui(page).pm.focus()
@@ -72,7 +72,7 @@ test.describe('accessibility', () => {
 
   test('the skip link moves focus to the calculator', async ({ page, isMobile }) => {
     test.skip(isMobile, 'keyboard navigation is a desktop concern')
-    await page.goto('./')
+    await page.goto('calculator/')
     await page.keyboard.press('Tab')
     const skip = page.getByRole('link', { name: 'Skip to calculator' })
     await expect(skip).toBeFocused()
@@ -84,7 +84,7 @@ test.describe('accessibility', () => {
 
   test('controls can be reached in a logical tab order', async ({ page, isMobile }) => {
     test.skip(isMobile, 'keyboard navigation is a desktop concern')
-    await page.goto('./?q0=100&p0=50&pm=40&c=4000')
+    await page.goto('calculator/?q0=100&p0=50&pm=40&c=4000')
     await ui(page).q0.focus()
     const order: string[] = []
     for (let i = 0; i < 6; i++) {
@@ -95,14 +95,14 @@ test.describe('accessibility', () => {
   })
 
   test('the chart has an accessible name and description', async ({ page }) => {
-    await page.goto('./?q0=100&p0=50&pm=40&c=4000')
+    await page.goto('calculator/?q0=100&p0=50&pm=40&c=4000')
     const chart = page.getByRole('img', { name: /Averaging-down curve/ })
     await expect(chart).toBeVisible()
     await expect(chart).toHaveAccessibleDescription(/maximum possible improvement of \$10\.00/)
   })
 
   test('results are announced politely after a change settles', async ({ page }) => {
-    await page.goto('./')
+    await page.goto('calculator/')
     await fillPosition(page, '100', '50', '40')
     await ui(page).amount.fill('4000')
     await ui(page).amount.press('Tab')

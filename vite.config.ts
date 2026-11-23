@@ -18,6 +18,7 @@ export default defineConfig({
     rolldownOptions: {
       input: {
         main: resolve(import.meta.dirname, 'index.html'),
+        calculator: resolve(import.meta.dirname, 'calculator/index.html'),
         notFound: resolve(import.meta.dirname, '404.html'),
       },
     },
@@ -34,7 +35,7 @@ export default defineConfig({
 
 /**
  * Injects the production URL into the HTML (`%SITE_URL%`) and emits
- * robots.txt and sitemap.xml for that URL.
+ * robots.txt and sitemap.xml for that URL (landing page + web calculator).
  */
 function sitePlugin(config: SiteConfig): Plugin {
   return {
@@ -55,13 +56,14 @@ function robotsTxt(config: SiteConfig): string {
   return `User-agent: *\nAllow: /\n\nSitemap: ${config.url}sitemap.xml\n`
 }
 
+const SITEMAP_PATHS = ['', 'calculator/']
+
 function sitemapXml(config: SiteConfig, lastmod: string | null): string {
   const lastmodTag = lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ''
+  const urls = SITEMAP_PATHS.map((path) => `  <url>\n    <loc>${config.url}${path}</loc>${lastmodTag}\n  </url>`)
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${config.url}</loc>${lastmodTag}
-  </url>
+${urls.join('\n')}
 </urlset>
 `
 }
