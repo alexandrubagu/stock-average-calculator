@@ -1279,6 +1279,13 @@ caption {
   text-decoration: none;
 }
 
+.not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: 0;
+}
+
 /* ==========================================================================
    Guided tour
    ========================================================================== */

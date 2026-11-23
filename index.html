@@ -2,586 +2,244 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Stock Average Calculator: Averaging Down &amp; New Cost Basis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>Stock Average Calculator for Android: Average Down &amp; Cost Basis</title>
     <meta
       name="description"
-      content="Free stock average calculator: enter your shares, average buy price and current price to see your new average cost and how averaging down hits diminishing returns."
+      content="Free stock average calculator app for Android. See your new average cost, how many shares to buy and the diminishing returns of averaging down. No ads, works offline."
     />
     <link rel="canonical" href="%SITE_URL%" />
-    <meta name="robots" content="index, follow" />
-    <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0b1120" media="(prefers-color-scheme: dark)" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#070b14" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="google-play-app" content="app-id=io.github.alexandrubagu.stockaverage" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Stock Average Calculator" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:title" content="Stock Average Calculator: see what averaging down really does" />
+    <meta property="og:title" content="Stock Average Calculator for Android: see what averaging down really does" />
     <meta
       property="og:description"
-      content="Enter your position and see your new average cost, shares to buy and the diminishing-returns curve of averaging down. Free, private, runs in your browser."
+      content="New average cost, shares to buy and the diminishing-returns curve, in a free Android app. No ads, no tracking, works offline."
     />
     <meta property="og:url" content="%SITE_URL%" />
-    <meta property="og:image" content="%SITE_URL%og-image.png" />
+    <meta property="og:image" content="%SITE_URL%og-app.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Curve showing how the average price improves less with every extra dollar invested" />
+    <meta property="og:image:alt" content="Stock Average Calculator app: a new average of $45.00 and the diminishing-returns curve" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Stock Average Calculator: see what averaging down really does" />
+    <meta name="twitter:title" content="Stock Average Calculator for Android" />
     <meta
       name="twitter:description"
-      content="Enter your position and see your new average cost, shares to buy and the diminishing-returns curve of averaging down."
+      content="See what averaging down really does: new average cost, shares to buy and the diminishing-returns curve. Free, no ads."
     />
-    <meta name="twitter:image" content="%SITE_URL%og-image.png" />
+    <meta name="twitter:image" content="%SITE_URL%og-app.png" />
 
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebApplication",
+        "@type": "MobileApplication",
         "name": "Stock Average Calculator",
         "url": "%SITE_URL%",
-        "description": "Calculates the new average cost per share after buying more shares at the current price, and charts the diminishing returns of averaging down.",
+        "sameAs": "https://play.google.com/store/apps/details?id=io.github.alexandrubagu.stockaverage",
+        "installUrl": "https://play.google.com/store/apps/details?id=io.github.alexandrubagu.stockaverage",
+        "description": "Android app that calculates your new average cost per share after buying more at the current price, how many shares your money buys, and the diminishing returns of averaging down.",
         "applicationCategory": "FinanceApplication",
-        "operatingSystem": "Any",
-        "browserRequirements": "Requires JavaScript for the interactive calculator",
+        "operatingSystem": "Android",
+        "image": "%SITE_URL%app/icon-192.png",
+        "screenshot": [
+          "%SITE_URL%app/1-position.webp",
+          "%SITE_URL%app/2-results.webp",
+          "%SITE_URL%app/3-capital.webp"
+        ],
+        "featureList": "New average cost basis, Shares to buy, Diminishing-returns chart, Works offline, No ads, No tracking",
         "isAccessibleForFree": true,
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
       }
     </script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How is the new average price calculated?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Add the cost of the shares you already own (shares held × average buy price) to the amount you spend on new shares, then divide by your new total number of shares. For example, 100 shares at $50 plus 100 shares at $40 gives (5,000 + 4,000) ÷ 200 = $45."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can averaging down bring my average below the current price?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. Every new share costs the current price, so your average moves toward that price but never reaches it. The largest possible improvement is your average buy price minus the current price, and getting close to it takes ever larger amounts of money."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why does each extra dollar improve my average by less?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Your average is a weighted average. The more new shares you add, the more the cheaper shares already dominate it, so each further share shifts it less. That is why the curve is steep at first and then flattens out."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What does the efficiency figure mean?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Efficiency is the marginal rate of improvement at the selected amount: how much the next $100 would lower your average, as a percentage of your original average buy price. It falls steadily as you invest more."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Does the calculator include fees, taxes or fractional shares?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. It buys whole shares only, at the current price you enter, with no commissions or taxes. Money that is not enough for one more whole share is left uninvested and not counted."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What if the current price is above my average buy price?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Then buying more is averaging up: every new share costs more than your current average, so your average rises. The calculator shows a warning and the curve falls below zero."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Are my numbers stored or sent anywhere?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. All calculations run in your browser. There is no account, no server, no cookies and no tracking. The values only appear in the page address so you can bookmark or share a scenario."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is this investment advice?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. The calculator shows what the arithmetic of averaging does. It cannot tell you whether a stock will recover, and it does not recommend buying, holding or selling anything."
-            }
-          }
-        ]
-      }
-    </script>
-    <script>
-      // Apply a saved theme before first paint to avoid a flash.
-      try {
-        var savedTheme = localStorage.getItem('theme')
-        if (savedTheme === 'light' || savedTheme === 'dark') document.documentElement.dataset.theme = savedTheme
-      } catch (e) {}
-    </script>
   </head>
   <body>
-    <a class="skip-link" href="#calculator">Skip to calculator</a>
+    <div class="glow glow-a" aria-hidden="true"></div>
+    <div class="glow glow-b" aria-hidden="true"></div>
 
-    <header class="site-header">
-      <div class="container header-inner">
-        <a class="brand" href="./">
-          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-            <rect width="32" height="32" rx="8" fill="currentColor" />
-            <path d="M7 24c3-10 8-14 18-15" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" />
-            <path d="M7 8h18" fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="2.5 2.5" opacity=".75" />
-          </svg>
+    <header class="top">
+      <div class="wrap top-inner">
+        <a class="brand" href="./" aria-label="Stock Average Calculator home">
+          <img src="/app/icon-192.png" width="36" height="36" alt="" />
           <span>Stock Average Calculator</span>
         </a>
-        <nav class="site-nav" aria-label="On this page">
-          <a href="#calculator">Calculator</a>
-          <a href="#how-it-works">Guide</a>
-          <a href="#faq">FAQ</a>
-        </nav>
-        <button id="theme-toggle" class="icon-button" type="button" aria-label="Switch to dark theme">
-          <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
-          <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-          </svg>
-        </button>
+        <a
+          class="pill"
+          href="https://play.google.com/store/apps/details?id=io.github.alexandrubagu.stockaverage"
+          rel="noopener"
+          >Get the app</a
+        >
       </div>
     </header>
 
     <main id="main">
-      <div class="container">
-        <section class="hero" aria-labelledby="page-title">
-          <h1 id="page-title">Stock Average Calculator</h1>
+      <section class="hero wrap" aria-labelledby="title">
+        <div class="hero-copy">
+          <p class="eyebrow">Free stock average calculator for Android</p>
+          <h1 id="title">See what averaging down <span class="grad">really</span> does</h1>
           <p class="lede">
-            How much does averaging down really help? Enter your position to see your new average cost — and the
-            curve that shows why every extra dollar improves your average by <em>less</em> than the one before.
+            Enter your shares, average price and today's price. Get your new cost basis, the shares to buy and the point
+            where buying more stops helping.
           </p>
-        </section>
+          <a
+            class="badge"
+            href="https://play.google.com/store/apps/details?id=io.github.alexandrubagu.stockaverage"
+            rel="noopener"
+          >
+            <img src="/app/google-play-badge.png" width="646" height="250" alt="Get it on Google Play" />
+          </a>
+          <ul class="chips" aria-label="Highlights">
+            <li>No ads</li>
+            <li>No tracking</li>
+            <li>Works offline</li>
+          </ul>
+        </div>
 
-        <section id="calculator" class="calculator" aria-label="Calculator" tabindex="-1">
-          <div class="calc-grid">
-            <form id="position-form" class="card position-card" novalidate aria-labelledby="position-title">
-              <div class="card-header">
-                <h2 id="position-title">Your position</h2>
-              </div>
-              <div class="fields">
-                <div class="field" data-field="q0">
-                  <label for="q0">
-                    <span>Shares held</span>
-                    <span class="symbol" aria-hidden="true">Q₀</span>
-                  </label>
-                  <div class="input-wrap">
-                    <input id="q0" name="q0" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="100" aria-describedby="q0-hint" />
-                  </div>
-                  <p class="hint" id="q0-hint">Number of shares you own now.</p>
-                  <p class="field-error" id="q0-error" hidden></p>
-                </div>
-
-                <div class="field" data-field="p0">
-                  <label for="p0">
-                    <span>Average buy price</span>
-                    <span class="symbol" aria-hidden="true">P₀</span>
-                  </label>
-                  <div class="input-wrap has-prefix">
-                    <span class="prefix" aria-hidden="true">$</span>
-                    <input id="p0" name="p0" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="50.00" aria-describedby="p0-hint" />
-                  </div>
-                  <p class="hint" id="p0-hint">Your cost basis per share.</p>
-                  <p class="field-error" id="p0-error" hidden></p>
-                </div>
-
-                <div class="field" data-field="pm">
-                  <label for="pm">
-                    <span>Current price</span>
-                    <span class="symbol" aria-hidden="true">Pₘ</span>
-                  </label>
-                  <div class="input-wrap has-prefix">
-                    <span class="prefix" aria-hidden="true">$</span>
-                    <input id="pm" name="pm" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="40.00" aria-describedby="pm-hint" />
-                  </div>
-                  <p class="hint" id="pm-hint">The price you would buy more at.</p>
-                  <p class="field-error" id="pm-error" hidden></p>
-                </div>
-              </div>
-              <div class="form-actions">
-                <button id="tour-button" class="button button-secondary" type="button">
-                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="m10 8 6 4-6 4z" />
-                  </svg>
-                  How it works
-                </button>
-                <button id="reset-button" class="button button-ghost" type="reset">Reset</button>
-              </div>
-              <p class="privacy-note">
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <rect x="5" y="11" width="14" height="10" rx="2" />
-                  <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-                </svg>
-                Runs entirely in your browser. Nothing you enter is sent anywhere.
-              </p>
-              <noscript>
-                <p class="noscript">
-                  The interactive calculator needs JavaScript. You can still work out your new average by hand with the
-                  <a href="#formulas">formulas below</a>.
-                </p>
-              </noscript>
-            </form>
-
-            <div class="results">
-              <h2 class="visually-hidden">Results</h2>
-
-              <div id="notice-averaging-up" class="notice notice-warning" hidden>
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                  <path d="M12 9v4M12 17h.01" />
-                </svg>
-                <div>
-                  <p class="notice-title">Averaging up</p>
-                  <p id="notice-averaging-up-text"></p>
-                </div>
-              </div>
-
-              <div id="notice-flat" class="notice notice-info" hidden>
-                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 16v-4M12 8h.01" />
-                </svg>
-                <div>
-                  <p class="notice-title">No change possible</p>
-                  <p id="notice-flat-text"></p>
-                </div>
-              </div>
-
-              <figure class="card chart-card">
-                <div id="chart" class="chart">
-                  <svg class="chart-svg" viewBox="0 0 640 340" role="img" aria-label="Chart placeholder: enter your position to see the curve">
-                    <path class="placeholder-line" d="M 60,288 C 143.4,132 282.4,59.2 616,43.6" />
-                    <line class="placeholder-line" x1="60" y1="38" x2="616" y2="38" />
-                    <line class="axis-line" x1="60" y1="28" x2="60" y2="288" />
-                    <line class="axis-line" x1="60" y1="288" x2="616" y2="288" />
-                    <text class="placeholder-title" x="320" y="160" text-anchor="middle">Enter your position to see the curve</text>
-                    <text class="placeholder-sub" x="320" y="182" text-anchor="middle">Q₀ · P₀ · Pₘ</text>
-                  </svg>
-                </div>
-                <figcaption class="visually-hidden" id="chart-caption">
-                  Averaging-down curve: improvement in your average price for each amount of capital invested.
-                </figcaption>
-              </figure>
-
-              <section id="capital-panel" class="card capital-card" aria-labelledby="capital-title" hidden>
-                <div class="capital-header">
-                  <h3 id="capital-title">Capital to invest</h3>
-                  <div class="capital-readout">
-                    <output id="capital-display" for="capital-slider capital-amount">$0.00</output>
-                    <p id="capital-pct" class="muted">&nbsp;</p>
-                  </div>
-                </div>
-                <p class="muted capital-hint">Drag the slider, tap the chart or type an amount.</p>
-                <input id="capital-slider" class="range" type="range" min="0" max="10000" step="1" value="0" aria-labelledby="capital-title" />
-                <div class="slider-scale" aria-hidden="true">
-                  <span>$0</span>
-                  <span id="slider-mid"></span>
-                  <span id="slider-max"></span>
-                </div>
-                <div class="amount-row">
-                  <label for="capital-amount">Amount</label>
-                  <div class="input-wrap has-prefix">
-                    <span class="prefix" aria-hidden="true">$</span>
-                    <input id="capital-amount" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="0" aria-describedby="capital-amount-note" />
-                  </div>
-                  <p id="capital-amount-note" class="hint"></p>
-                </div>
-              </section>
-
-              <section id="stats" class="stats" aria-labelledby="stats-title" hidden>
-                <h3 id="stats-title" class="visually-hidden">Result details</h3>
-                <dl class="stat-grid">
-                  <div class="stat stat-primary" id="stat-new-avg-card">
-                    <dt>New average</dt>
-                    <dd>
-                      <span class="stat-value" id="stat-new-avg">—</span>
-                      <span class="stat-sub" id="stat-new-avg-sub"></span>
-                    </dd>
-                  </div>
-                  <div class="stat stat-primary" id="stat-delta-card">
-                    <dt>Improvement</dt>
-                    <dd>
-                      <span class="stat-value" id="stat-delta">—</span>
-                      <span class="stat-sub" id="stat-delta-sub"></span>
-                    </dd>
-                  </div>
-                  <div class="stat">
-                    <dt>Capital</dt>
-                    <dd>
-                      <span class="stat-value" id="stat-capital">—</span>
-                      <span class="stat-sub" id="stat-capital-sub"></span>
-                    </dd>
-                  </div>
-                  <div class="stat">
-                    <dt>Shares to buy</dt>
-                    <dd>
-                      <span class="stat-value" id="stat-shares">—</span>
-                      <span class="stat-sub" id="stat-shares-sub"></span>
-                    </dd>
-                  </div>
-                  <div class="stat">
-                    <dt>Efficiency</dt>
-                    <dd>
-                      <span class="stat-value" id="stat-efficiency">—</span>
-                      <span class="stat-sub" id="stat-efficiency-sub"></span>
-                    </dd>
-                  </div>
-                </dl>
-              </section>
-
-              <details id="data-table" class="card data-table" hidden>
-                <summary>Show the curve as a table</summary>
-                <div class="table-wrap" tabindex="0" role="region" aria-label="Curve values table">
-                  <table>
-                    <caption class="visually-hidden">Results at evenly spaced amounts up to the slider maximum</caption>
-                    <thead>
-                      <tr>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Shares bought</th>
-                        <th scope="col">Spent</th>
-                        <th scope="col">New average</th>
-                        <th scope="col">Improvement</th>
-                        <th scope="col">Of max</th>
-                      </tr>
-                    </thead>
-                    <tbody id="data-table-body"></tbody>
-                  </table>
-                </div>
-              </details>
-
-              <section class="card how-to-read" aria-labelledby="how-to-read-title">
-                <h3 id="how-to-read-title">How to read this chart</h3>
-                <div class="how-to-read-grid">
-                  <div>
-                    <p class="how-to-read-term"><span class="swatch swatch-curve" aria-hidden="true"></span>The curve</p>
-                    <p>
-                      How much your average price improves as you invest more. It is always concave: each additional dollar
-                      helps less than the last.
-                    </p>
-                  </div>
-                  <div>
-                    <p class="how-to-read-term"><span class="swatch swatch-limit" aria-hidden="true"></span>The dashed line</p>
-                    <p>
-                      The theoretical maximum improvement. No amount of capital can push your average below the current
-                      market price — it is a mathematical limit.
-                    </p>
-                  </div>
-                  <div>
-                    <p class="how-to-read-term"><span class="swatch swatch-dot" aria-hidden="true"></span>The marker</p>
-                    <p>
-                      Your selected amount on the curve. Move the slider to explore different amounts and see exactly what
-                      happens to your average.
-                    </p>
-                  </div>
-                </div>
-              </section>
-            </div>
-          </div>
-          <p id="announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></p>
-        </section>
-
-        <article class="content">
-          <section id="how-it-works" aria-labelledby="how-it-works-title">
-            <h2 id="how-it-works-title">How averaging down works</h2>
-            <p>
-              Averaging down means buying more shares of a stock you already own after its price has fallen below what
-              you paid. Because the new shares cost less than your current average, your average cost per share — your
-              cost basis — goes down.
-            </p>
-            <p>
-              The improvement is not linear. Your new average is a weighted average of the shares you already hold and
-              the ones you add, so the first purchases move it the most. Every further dollar improves the average by
-              less than the dollar before it, and no amount of money can bring your average all the way down to the
-              current market price. The calculator draws this curve for your exact position, so you can see where extra
-              capital still makes a visible difference and where it barely moves the number.
-            </p>
-          </section>
-
-          <section id="formulas" aria-labelledby="formulas-title">
-            <h2 id="formulas-title">The formulas behind the calculator</h2>
-            <p>The calculator uses four inputs:</p>
-            <dl class="variables">
-              <div><dt><var>Q₀</var></dt><dd>shares you hold now</dd></div>
-              <div><dt><var>P₀</var></dt><dd>your average buy price per share</dd></div>
-              <div><dt><var>Pₘ</var></dt><dd>the current market price</dd></div>
-              <div><dt><var>C</var></dt><dd>the capital you plan to invest</dd></div>
-            </dl>
-            <ul class="formula-list">
-              <li>
-                <span class="formula-name">Shares you can buy</span>
-                <span class="formula"><var>Q</var> = ⌊ <var>C</var> ÷ <var>Pₘ</var> ⌋</span>
-                <span class="formula-note">Whole shares only; leftover cash is not invested.</span>
+        <div class="showcase" aria-roledescription="carousel" aria-label="App screenshots">
+          <div class="phone">
+            <ul class="track" id="track" tabindex="0" aria-live="off">
+              <li class="slide" id="slide-1" aria-roledescription="slide" aria-label="1 of 5">
+                <img
+                  src="/app/1-position.webp"
+                  srcset="/app/1-position-sm.webp 360w, /app/1-position.webp 540w"
+                  sizes="(max-width: 640px) 240px, 290px"
+                  width="540"
+                  height="1200"
+                  alt="Position screen: shares held, average buy price and current price"
+                  fetchpriority="high"
+                />
               </li>
-              <li>
-                <span class="formula-name">New average price</span>
-                <span class="formula"><var>P</var><sub>new</sub> = (<var>Q₀</var> × <var>P₀</var> + <var>Q</var> × <var>Pₘ</var>) ÷ (<var>Q₀</var> + <var>Q</var>)</span>
+              <li class="slide" id="slide-2" aria-roledescription="slide" aria-label="2 of 5">
+                <img
+                  src="/app/2-results.webp"
+                  srcset="/app/2-results-sm.webp 360w, /app/2-results.webp 540w"
+                  sizes="(max-width: 640px) 240px, 290px"
+                  width="540"
+                  height="1200"
+                  loading="lazy"
+                  decoding="async"
+                  alt="Results: new average of $45.00, $5.00 improvement and the diminishing-returns chart"
+                />
               </li>
-              <li>
-                <span class="formula-name">Improvement</span>
-                <span class="formula">Δ = <var>P₀</var> − <var>P</var><sub>new</sub></span>
+              <li class="slide" id="slide-3" aria-roledescription="slide" aria-label="3 of 5">
+                <img
+                  src="/app/3-capital.webp"
+                  srcset="/app/3-capital-sm.webp 360w, /app/3-capital.webp 540w"
+                  sizes="(max-width: 640px) 240px, 290px"
+                  width="540"
+                  height="1200"
+                  loading="lazy"
+                  decoding="async"
+                  alt="Capital slider with shares to buy and the efficiency of the next $100"
+                />
               </li>
-              <li>
-                <span class="formula-name">Maximum improvement</span>
-                <span class="formula">Δ<sub>max</sub> = <var>P₀</var> − <var>Pₘ</var></span>
-                <span class="formula-note">Approached as capital grows, but never reached.</span>
+              <li class="slide" id="slide-4" aria-roledescription="slide" aria-label="4 of 5">
+                <img
+                  src="/app/4-menu.webp"
+                  srcset="/app/4-menu-sm.webp 360w, /app/4-menu.webp 540w"
+                  sizes="(max-width: 640px) 240px, 290px"
+                  width="540"
+                  height="1200"
+                  loading="lazy"
+                  decoding="async"
+                  alt="Menu with Help, FAQ, disclaimer and dark, light or system theme"
+                />
               </li>
-              <li>
-                <span class="formula-name">Slider range</span>
-                <span class="formula">0 to 9 × <var>Q₀</var> × <var>Pₘ</var></span>
-                <span class="formula-note">The capital that reaches 90% of Δ<sub>max</sub>. When <var>Pₘ</var> ≥ <var>P₀</var> the range is 10 × <var>Q₀</var> × <var>P₀</var>.</span>
-              </li>
-              <li>
-                <span class="formula-name">Efficiency</span>
-                <span class="formula"><var>E</var> = <var>Q₀</var> · |<var>Pₘ</var> − <var>P₀</var>| ÷ (<var>P₀</var> · <var>Pₘ</var> · (<var>Q₀</var> + <var>C</var> ÷ <var>Pₘ</var>)²)</span>
-                <span class="formula-note">The marginal rate: how much the next dollar lowers your average, as a fraction of <var>P₀</var>. Shown as a percentage per $100.</span>
+              <li class="slide" id="slide-5" aria-roledescription="slide" aria-label="5 of 5">
+                <img
+                  src="/app/5-faq.webp"
+                  srcset="/app/5-faq-sm.webp 360w, /app/5-faq.webp 540w"
+                  sizes="(max-width: 640px) 240px, 290px"
+                  width="540"
+                  height="1200"
+                  loading="lazy"
+                  decoding="async"
+                  alt="Frequently asked questions built into the app"
+                />
               </li>
             </ul>
-            <p>
-              All arithmetic uses 28-digit decimal math rather than binary floating point, so results don't pick up
-              rounding errors such as 0.1 + 0.2 ≠ 0.3.
-            </p>
-          </section>
-
-          <section id="example" aria-labelledby="example-title">
-            <h2 id="example-title">Worked example</h2>
-            <p>
-              You own 100 shares with an average buy price of $50.00. The stock now trades at $40.00, so the most your
-              average could ever improve is $10.00 per share.
-            </p>
-            <div class="table-wrap" tabindex="0" role="region" aria-label="Worked example table">
-              <table class="example-table">
-                <caption>Averaging down 100 shares bought at $50.00 with the price at $40.00</caption>
-                <thead>
-                  <tr>
-                    <th scope="col">You invest</th>
-                    <th scope="col">Shares bought</th>
-                    <th scope="col">New average</th>
-                    <th scope="col">Improvement</th>
-                    <th scope="col">Of max</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>$4,000</td><td>100</td><td>$45.00</td><td>$5.00</td><td>50%</td></tr>
-                  <tr><td>$12,000</td><td>300</td><td>$42.50</td><td>$7.50</td><td>75%</td></tr>
-                  <tr><td>$36,000</td><td>900</td><td>$41.00</td><td>$9.00</td><td>90%</td></tr>
-                </tbody>
-              </table>
+          </div>
+          <div class="controls">
+            <button class="arrow" type="button" data-dir="-1" aria-controls="track" aria-label="Previous screenshot">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+            </button>
+            <div class="dots" role="group" aria-label="Choose screenshot">
+              <button type="button" data-go="0" aria-label="Screenshot 1" aria-current="true"></button>
+              <button type="button" data-go="1" aria-label="Screenshot 2"></button>
+              <button type="button" data-go="2" aria-label="Screenshot 3"></button>
+              <button type="button" data-go="3" aria-label="Screenshot 4"></button>
+              <button type="button" data-go="4" aria-label="Screenshot 5"></button>
             </div>
-            <p>
-              The first $4,000 gets you half of the possible improvement. The next $32,000 — eight times as much money —
-              adds only another 40 percentage points. At $4,000 the efficiency is 0.1250% per $100: the next $100 would
-              lower your average by 0.125% of $50, about six cents.
-            </p>
-          </section>
+            <button class="arrow" type="button" data-dir="1" aria-controls="track" aria-label="Next screenshot">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+            </button>
+          </div>
+        </div>
+      </section>
 
-          <section id="faq" aria-labelledby="faq-title">
-            <h2 id="faq-title">Frequently asked questions</h2>
-            <div class="faq">
-              <div class="faq-item">
-                <h3>How is the new average price calculated?</h3>
-                <p>
-                  Add the cost of the shares you already own (shares held × average buy price) to the amount you spend on
-                  new shares, then divide by your new total number of shares. For example, 100 shares at $50 plus 100
-                  shares at $40 gives (5,000 + 4,000) ÷ 200 = $45.
-                </p>
-              </div>
+      <section class="features wrap" aria-labelledby="features-title">
+        <h2 id="features-title" class="sr-only">Features</h2>
+        <ul class="grid">
+          <li class="card">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16M7 15l4-4 3 3 5-6" /></svg>
+            <h3>New average &amp; cost basis</h3>
+            <p>Your average after buying more, and exactly how much it improves.</p>
+          </li>
+          <li class="card">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="20" r="1.5" /><circle cx="18" cy="20" r="1.5" /><path d="M2 3h3l2.5 12h11L21 7H7" /></svg>
+            <h3>Shares to buy</h3>
+            <p>How many whole shares your money buys at today's price.</p>
+          </li>
+          <li class="card">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20c3-9 8-13 18-14" /><path d="M3 4h18" stroke-dasharray="2 3" /></svg>
+            <h3>Diminishing returns</h3>
+            <p>An interactive curve that shows when extra money stops helping.</p>
+          </li>
+          <li class="card">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
+            <h3>Private by design</h3>
+            <p>No account, no ads, no internet permission. Precise decimal math on your phone.</p>
+          </li>
+        </ul>
+      </section>
 
-              <div class="faq-item">
-                <h3>Can averaging down bring my average below the current price?</h3>
-                <p>
-                  No. Every new share costs the current price, so your average moves toward that price but never reaches
-                  it. The largest possible improvement is your average buy price minus the current price, and getting close
-                  to it takes ever larger amounts of money.
-                </p>
-              </div>
-
-              <div class="faq-item">
-                <h3>Why does each extra dollar improve my average by less?</h3>
-                <p>
-                  Your average is a weighted average. The more new shares you add, the more the cheaper shares already
-                  dominate it, so each further share shifts it less. That is why the curve is steep at first and then
-                  flattens out.
-                </p>
-              </div>
-
-              <div class="faq-item">
-                <h3>What does the efficiency figure mean?</h3>
-                <p>
-                  Efficiency is the marginal rate of improvement at the selected amount: how much the next $100 would lower
-                  your average, as a percentage of your original average buy price. It falls steadily as you invest more.
-                </p>
-              </div>
-
-              <div class="faq-item">
-                <h3>Does the calculator include fees, taxes or fractional shares?</h3>
-                <p>
-                  No. It buys whole shares only, at the current price you enter, with no commissions or taxes. Money that is
-                  not enough for one more whole share is left uninvested and not counted.
-                </p>
-              </div>
-
-              <div class="faq-item">
-                <h3>What if the current price is above my average buy price?</h3>
-                <p>
-                  Then buying more is averaging up: every new share costs more than your current average, so your average
-                  rises. The calculator shows a warning and the curve falls below zero.
-                </p>
-              </div>
-
-              <div class="faq-item">
-                <h3>Are my numbers stored or sent anywhere?</h3>
-                <p>
-                  No. All calculations run in your browser. There is no account, no server, no cookies and no tracking. The
-                  values only appear in the page address so you can bookmark or share a scenario.
-                </p>
-              </div>
-
-              <div class="faq-item">
-                <h3>Is this investment advice?</h3>
-                <p>
-                  No. The calculator shows what the arithmetic of averaging does. It cannot tell you whether a stock will
-                  recover, and it does not recommend buying, holding or selling anything.
-                </p>
-              </div>
-            </div>
-          </section>
-        </article>
-      </div>
+      <section class="cta wrap" aria-labelledby="cta-title">
+        <h2 id="cta-title">Average down with your eyes open.</h2>
+        <a
+          class="badge"
+          href="https://play.google.com/store/apps/details?id=io.github.alexandrubagu.stockaverage"
+          rel="noopener"
+        >
+          <img src="/app/google-play-badge.png" width="646" height="250" alt="Get it on Google Play" loading="lazy" />
+        </a>
+        <p class="alt">On a computer? <a href="calculator/">Use the web calculator</a></p>
+      </section>
     </main>
 
-    <footer class="site-footer">
-      <div class="container">
-        <p class="disclaimer">
-          <strong>Not financial advice.</strong> This calculator performs mathematical calculations only. Its results do
-          not constitute investment advice, a recommendation or any other form of financial guidance. All investment
-          decisions are your own responsibility.
-        </p>
-        <p class="footer-meta">
-          No cookies, no tracking — everything runs in your browser.
+    <footer class="foot">
+      <div class="wrap">
+        <nav aria-label="Footer">
+          <a href="https://alexandrubagu.github.io/stock-average-calculator-privacy/">Privacy policy</a>
+          <a href="calculator/">Web calculator</a>
           <a href="https://github.com/alexandrubagu/stock-average-calculator">Source code</a>
-        </p>
+        </nav>
+        <p>Not financial advice. The app performs calculations only and does not recommend buying or selling anything.</p>
+        <p>Google Play and the Google Play logo are trademarks of Google LLC.</p>
       </div>
     </footer>
 
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/landing.ts"></script>
   </body>
 </html>

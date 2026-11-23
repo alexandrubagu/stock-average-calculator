@@ -19,7 +19,20 @@ const fail = (message) => problems.push(message)
 
 const files = walk(dist).map((file) => relative(dist, file).split('\\').join('/'))
 
-for (const required of ['index.html', '404.html', 'robots.txt', 'sitemap.xml', 'favicon.svg', 'og-image.png', 'apple-touch-icon.png']) {
+const requiredFiles = [
+  'index.html',
+  'calculator/index.html',
+  '404.html',
+  'robots.txt',
+  'sitemap.xml',
+  'favicon.svg',
+  'og-image.png',
+  'og-app.png',
+  'apple-touch-icon.png',
+  'app/google-play-badge.png',
+  'app/icon-192.png',
+]
+for (const required of requiredFiles) {
   if (!files.includes(required)) fail(`missing dist/${required}`)
 }
 if (!files.some((file) => /^assets\/.+-[\w-]{8}\.js$/.test(file))) fail('no hashed JavaScript bundle in dist/assets')
@@ -43,20 +56,26 @@ for (const page of files.filter((file) => file.endsWith('.html'))) {
   }
 }
 
-// SEO metadata
-const index = readFileSync(join(dist, 'index.html'), 'utf8')
-const attr = (pattern) => index.match(pattern)?.[1]
-if (attr(/<link rel="canonical" href="([^"]+)"/) !== siteUrl.href) fail('canonical URL does not equal SITE_URL')
-if (attr(/<meta property="og:url" content="([^"]+)"/) !== siteUrl.href) fail('og:url does not equal SITE_URL')
-if (attr(/<meta property="og:image" content="([^"]+)"/) !== `${siteUrl.href}og-image.png`) fail('og:image is not absolute')
-if (!/<title>[^<]{10,70}<\/title>/.test(index)) fail('missing or overly long <title>')
-if (!/<meta\s+name="description"\s+content="[^"]{50,170}"/.test(index)) fail('missing or overly long meta description')
-if (index.includes('%SITE_URL%') || index.includes('%BASE_URL%')) fail('unreplaced placeholder in index.html')
-for (const [, json] of index.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
-  try {
-    JSON.parse(json)
-  } catch {
-    fail('invalid JSON-LD block in index.html')
+// SEO metadata of the indexable pages: the landing page and the web calculator
+const pages = [
+  { file: 'index.html', url: siteUrl.href, ogImage: `${siteUrl.href}og-app.png` },
+  { file: 'calculator/index.html', url: `${siteUrl.href}calculator/`, ogImage: `${siteUrl.href}og-image.png` },
+]
+for (const { file, url, ogImage } of pages) {
+  const html = readFileSync(join(dist, file), 'utf8')
+  const attr = (pattern) => html.match(pattern)?.[1]
+  if (attr(/<link rel="canonical" href="([^"]+)"/) !== url) fail(`${file}: canonical URL is not ${url}`)
+  if (attr(/<meta property="og:url" content="([^"]+)"/) !== url) fail(`${file}: og:url is not ${url}`)
+  if (attr(/<meta property="og:image" content="([^"]+)"/) !== ogImage) fail(`${file}: og:image is not ${ogImage}`)
+  if (!/<title>[^<]{10,70}<\/title>/.test(html)) fail(`${file}: missing or overly long <title>`)
+  if (!/<meta\s+name="description"\s+content="[^"]{50,170}"/.test(html)) fail(`${file}: missing or overly long meta description`)
+  if (html.includes('%SITE_URL%') || html.includes('%BASE_URL%')) fail(`${file}: unreplaced placeholder`)
+  for (const [, json] of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    try {
+      JSON.parse(json)
+    } catch {
+      fail(`${file}: invalid JSON-LD block`)
+    }
   }
 }
 
@@ -66,7 +85,7 @@ if (!robots.includes(`Sitemap: ${siteUrl.href}sitemap.xml`)) fail('robots.txt do
 const sitemap = readFileSync(join(dist, 'sitemap.xml'), 'utf8')
 if (!sitemap.startsWith('<?xml version="1.0" encoding="UTF-8"?>')) fail('sitemap.xml has no XML declaration')
 if (!sitemap.includes('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')) fail('sitemap.xml has no urlset')
-if (!sitemap.includes(`<loc>${siteUrl.href}</loc>`)) fail('sitemap.xml does not list SITE_URL')
+for (const { url } of pages) if (!sitemap.includes(`<loc>${url}</loc>`)) fail(`sitemap.xml does not list ${url}`)
 if ((sitemap.match(/<url>/g) ?? []).length !== (sitemap.match(/<\/url>/g) ?? []).length) fail('sitemap.xml is not well-formed')
 
 // No development or Phoenix leftovers in any text file
